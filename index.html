@@ -122,6 +122,9 @@
                 }
             })
 
+            //Se regresa el atributo de App
+            //donde se realiza el grid con las cartas
+            //cada una con las propiedades
             return(
             <div className="App">
                 <header>
@@ -130,7 +133,6 @@
                     <h2>Cantidad de Intentos: {voltear_carta}</h2>
                 </header>
                 
-
                 <div className="cardgrid">
                     {cartas.map(carta => (
                         <Album_Carta key={carta.id} 
