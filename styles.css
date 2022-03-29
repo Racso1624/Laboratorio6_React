@@ -1,0 +1,48 @@
+body{
+    background-color: black;
+}
+
+.App header{
+    color: white;
+    text-align: center;
+}
+
+.cardgrid{
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 30px;
+}
+
+.album{
+    position: relative;
+}
+
+.album img{
+    width: 200px;
+    height: 200px;
+    display: block;
+    border: 3px solid white;
+    border-radius: 5px;
+}
+
+.album .portada{
+    transform: rotateY(90deg);
+    position: absolute;
+    transition: all ease-in 0.5s;
+}
+
+.volteada .portada{
+    transform: rotateY(0deg);
+    transition-delay: 0.5s;
+}
+
+.album .contraportada{
+    transition: all ease-in 0.5s;
+    transition-delay: 0.5s;
+}
+
+.volteada .contraportada{
+    transform: rotateY(90deg);
+    transition-delay: 0s;
+}

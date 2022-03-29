@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styles.css" /></style>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const imagenes_cartas = [
+            {"src" : "./images/igor.jpg", es_igual: false},
+            {"src" : "./images/afterhours.jpg", es_igual: false},
+            {"src" : "./images/callmeifyougetlost.png", es_igual: false},
+            {"src" : "./images/flowerboy.jpg", es_igual: false},
+            {"src" : "./images/futurenostalgia.jpg", es_igual: false},
+            {"src" : "./images/mydearmelancholy.jpg", es_igual: false},
+            {"src" : "./images/starboy.jpg", es_igual: false},
+            {"src" : "./images/dawnfm.jpg", es_igual: false}
+        ]
+
+        let App = () => {
+
+            const [cartas, set_cartas] = React.useState([])
+            const [voltear_carta, setvoltear_carta] = React.useState(0)
+            const [eleccion_uno, seteleccion_uno] = React.useState(null)
+            const [eleccion_dos, seteleccion_dos] = React.useState(null)
+
+            const Album_Carta = ({carta, elegir_carta, volteada}) => {
+
+                const eleccion_carta = () => {
+                    elegir_carta(carta)
+                }
+
+                console.log(volteada)
+
+                return(
+                    <div className="album">
+                        <div className={volteada ? "volteada" : ""}>
+                            <img className="portada" src={carta.src} />
+                            <img className="contraportada" src="./images/cardback.jpg" onClick={eleccion_carta}/>
+                        </div>
+                    </div>
+                )
+            }
+
+            const aleatorizar = () => {
+                const cartas_aleatorias = [...imagenes_cartas, ...imagenes_cartas]
+                .sort(() => Math.random() - 0.5)
+                .map((carta) => ({...carta, id: Math.random()}))
+            
+                set_cartas(cartas_aleatorias)
+                setvoltear_carta(0)
+            }
+
+            const voltear_de_nuevo = () => {
+                seteleccion_uno(null)
+                seteleccion_dos(null)
+                setvoltear_carta(anteriorgiro => anteriorgiro + 1)
+            }
+
+            const elegir_carta = (carta) => {
+                eleccion_uno ? seteleccion_dos(carta) : seteleccion_uno(carta)
+            }
+
+            React.useEffect(() => {
+                if(eleccion_uno && eleccion_dos){
+                    if(eleccion_uno.src === eleccion_dos.src){
+                        set_cartas(anteriorcarta => {
+                            return anteriorcarta.map(carta => {
+                                if(carta.src === eleccion_uno.src){
+                                    return {...carta, es_igual: true}
+                                }
+                                else{
+                                    return carta
+                                }
+                            })
+                        })
+                        voltear_de_nuevo()
+                    }
+                    else{
+                        setTimeout(() => voltear_de_nuevo(), 1000)
+                    }
+                }
+            }, [eleccion_uno, eleccion_dos])
+
+            React.useEffect(() => {
+                aleatorizar()
+            }, [])
+
+
+            return(
+            <div className="App">
+                <header>
+                    <h1>Juego de Memoria de Portadas de Albumes</h1>
+                    <button onClick={aleatorizar}>Nuevo Juego</button>
+                    <h2>Cantidad de Intentos: {voltear_carta}</h2>
+                </header>
+                
+
+                <div className="cardgrid">
+                    {cartas.map(carta => (
+                        <Album_Carta key={carta.id} 
+                        carta={carta} 
+                        elegir_carta={elegir_carta} 
+                        volteada={carta === eleccion_uno || carta === eleccion_dos || carta.es_igual} />
+                    ))}
+                </div>
+            </div>
+            )
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById("root")
+        )
+    </script>
+</body>
+
+</html>
