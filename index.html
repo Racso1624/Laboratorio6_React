@@ -13,6 +13,7 @@
 
     <script type="text/babel">
 
+        //Lista de imagenes de los albumes
         const imagenes_cartas = [
             {"src" : "./images/igor.jpg", es_igual: false},
             {"src" : "./images/afterhours.jpg", es_igual: false},
@@ -24,13 +25,17 @@
             {"src" : "./images/dawnfm.jpg", es_igual: false}
         ]
 
+        //Funcion de la App de Javascript
         let App = () => {
 
+            //Se realizan variables y se les asigna un estado
             const [cartas, set_cartas] = React.useState([])
             const [voltear_carta, setvoltear_carta] = React.useState(0)
             const [eleccion_uno, seteleccion_uno] = React.useState(null)
             const [eleccion_dos, seteleccion_dos] = React.useState(null)
 
+            //Se realiza el elemento de Album_Carta
+            //Este contiene los atributos principales de cada carta del juego
             const Album_Carta = ({carta, elegir_carta, volteada}) => {
 
                 const eleccion_carta = () => {
@@ -49,6 +54,7 @@
                 )
             }
 
+            //Se realiza la funcion para aleatoriazar las cartas en el juego
             const aleatorizar = () => {
                 const cartas_aleatorias = [...imagenes_cartas, ...imagenes_cartas]
                 .sort(() => Math.random() - 0.5)
@@ -58,16 +64,28 @@
                 setvoltear_carta(0)
             }
 
+            //Se realiza la funcion para cuando las cartas se deben de voltear al momento
+            //de realizar una eleccion incorrecta
             const voltear_de_nuevo = () => {
                 seteleccion_uno(null)
                 seteleccion_dos(null)
                 setvoltear_carta(anteriorgiro => anteriorgiro + 1)
             }
 
+            //Se realiza la funcion para cuando se escoge o presiona una carta
+            //y esta se asigne a un estado de las elecciones
             const elegir_carta = (carta) => {
-                eleccion_uno ? seteleccion_dos(carta) : seteleccion_uno(carta)
+                if(eleccion_uno){
+                    seteleccion_dos(carta)
+                }
+                else{
+                    seteleccion_uno(carta)
+                }
             }
 
+            //Se realiza la comparacion con respecto a las dos elecciones de cartas
+            //se comparan los src de cada unas de las cartas y se activa la propiedad
+            //para conocer si son iguales
             React.useEffect(() => {
                 if(eleccion_uno && eleccion_dos){
                     if(eleccion_uno.src === eleccion_dos.src){
@@ -89,6 +107,7 @@
                 }
             }, [eleccion_uno, eleccion_dos])
 
+            //Se realiza para inicializar el juego con las cartas revueltas
             React.useEffect(() => {
                 aleatorizar()
             }, [])
