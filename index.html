@@ -33,6 +33,7 @@
             const [voltear_carta, setvoltear_carta] = React.useState(0)
             const [eleccion_uno, seteleccion_uno] = React.useState(null)
             const [eleccion_dos, seteleccion_dos] = React.useState(null)
+            const [aciertos, setaciertos] = React.useState(0)
 
             //Se realiza el elemento de Album_Carta
             //Este contiene los atributos principales de cada carta del juego
@@ -41,8 +42,6 @@
                 const eleccion_carta = () => {
                     elegir_carta(carta)
                 }
-
-                console.log(volteada)
 
                 return(
                     <div className="album">
@@ -92,6 +91,7 @@
                         set_cartas(anteriorcarta => {
                             return anteriorcarta.map(carta => {
                                 if(carta.src === eleccion_uno.src){
+                                    setaciertos(acierto_anterior => acierto_anterior + 1)
                                     return {...carta, es_igual: true}
                                 }
                                 else{
@@ -112,11 +112,20 @@
                 aleatorizar()
             }, [])
 
+            //Si llega a la cantidad de aciertos
+            //se coloca un mensaje de ganador
+            React.useEffect(() => {
+                if(aciertos === 16){
+                    alert("Ganaste")
+                    aleatorizar()
+                    setaciertos(0)
+                }
+            })
 
             return(
             <div className="App">
                 <header>
-                    <h1>Juego de Memoria de Portadas de Albumes</h1>
+                    <h1>Juego de Memoria de Portadas de Álbumes</h1>
                     <button onClick={aleatorizar}>Nuevo Juego</button>
                     <h2>Cantidad de Intentos: {voltear_carta}</h2>
                 </header>
